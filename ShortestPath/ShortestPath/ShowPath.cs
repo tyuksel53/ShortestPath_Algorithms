@@ -40,6 +40,29 @@ namespace ShortestPath
             char character = (char)dotChar;
             g.DrawString(character.ToString(), drawFont, drawBrush, x+3, y+2);
         }
+        private void DrawTriangle(int x, int y, Color DotColor)
+        {
+            Graphics g = this.CreateGraphics();
+            Pen drawingPen = new Pen(DotColor, 1);
+            g.DrawLine(drawingPen, new Point(x-13, y-16), new Point(x-8, y-21));
+            g.DrawLine(drawingPen, new Point(x-8, y-21), new Point(x-3, y-16));
+            g.DrawLine(drawingPen, new Point(x-13, y-16), new Point(x-3, y-16));
+
+            g.DrawLine(drawingPen, new Point(x-13, y), new Point(x +5-13, y+5));
+            g.DrawLine(drawingPen, new Point(x+5-13 , y +5), new Point(x+10-13, y));
+            g.DrawLine(drawingPen, new Point(x-13, y), new Point(x+10-13, y));
+
+            g.DrawLine(drawingPen, new Point(x - 13-8, y - 16+8), new Point(x - 8-8, y - 21+8));
+            g.DrawLine(drawingPen, new Point(x - 13-8, y - 16+8), new Point(x - 8-8, y - 11+8));
+            g.DrawLine(drawingPen, new Point(x - 8-8, y - 11+8), new Point(x - 8-8, y - 21+8));
+
+            g.DrawLine(drawingPen, new Point(x - 13 + 18, y - 16 + 8), new Point(x - 18 + 18, y - 21 + 8));
+            g.DrawLine(drawingPen, new Point(x - 13 + 18, y - 16 + 8), new Point(x - 18 + 18, y - 11 + 8));
+            g.DrawLine(drawingPen, new Point(x - 18 + 18, y - 11 + 8), new Point(x - 18 + 18, y - 21 + 8));
+
+
+
+        }
         private void ShowPath_Paint(object sender, PaintEventArgs e)
         {
             Control control = (Control)sender;
@@ -74,12 +97,10 @@ namespace ShortestPath
                 }
             }
         }
-
         private void CalculateButton_Click(object sender, EventArgs e)
         {
 
         }
-
         private void UndoButton_Click(object sender, EventArgs e)
         {
             DotNum = DotNum - 1;
@@ -94,7 +115,6 @@ namespace ShortestPath
             DrawEllipse(dots.ElementAt(DotNum-1).DotX, dots.ElementAt(DotNum-1).DotY, this.BackColor, dots.ElementAt(DotNum-1).DotChar, this.BackColor);
             dots.RemoveAt(DotNum - 1);
         }
-
         private void ClearButton_Click(object sender, EventArgs e)
         {
             DotNum = 1;
@@ -105,6 +125,41 @@ namespace ShortestPath
                 DrawEllipse(dots.ElementAt(i).DotX, dots.ElementAt(i).DotY, this.BackColor,dots.ElementAt(i).DotChar,this.BackColor);
             }
             dots.Clear();
+        }
+        private void ShowPath_MouseMove(object sender, MouseEventArgs e)
+        {
+            bool control = false;
+            var relativePoint = this.PointToClient(Cursor.Position);
+            var x = relativePoint.X -8;
+            var y = relativePoint.Y -8;
+            if (305 < x && x < (AreaWidth + 288))
+            {
+                if (35 < y && y < AreaHeight + 13)
+                {
+                    for (int i = 0; i < dots.Count; i++)
+                    {
+                        var uzunlukX = Math.Abs(x - dots.ElementAt(i).DotX);
+                        uzunlukX = uzunlukX * uzunlukX;
+                        var uzunlukY = Math.Abs(y - dots.ElementAt(i).DotY);
+                        uzunlukY = uzunlukY * uzunlukY;
+                        var toplam = Math.Sqrt(uzunlukX + uzunlukY);
+                        if (toplam <= 17)
+                        {
+                            control = true;
+                            //MessageBox.Show("Hello World");
+                            DrawTriangle(dots.ElementAt(i).DotX + 16, dots.ElementAt(i).DotY + 16, Color.Black);
+                        }
+                    }
+                    if (control == false)
+                    {
+                        for (int i = 0; i < dots.Count; i++)
+                        {
+                            DrawTriangle(dots.ElementAt(i).DotX + 16, dots.ElementAt(i).DotY + 16, this.BackColor);
+                        }
+                    }
+
+                }
+            }
         }
     }
 }

@@ -115,6 +115,7 @@
             this.Text = "ShowPath";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ShowPath_Paint);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ShowPath_MouseClick);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ShowPath_MouseMove);
             this.ResumeLayout(false);
             this.PerformLayout();
 
