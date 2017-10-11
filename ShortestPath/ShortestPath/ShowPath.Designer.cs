@@ -34,6 +34,10 @@
             this.UndoButton = new System.Windows.Forms.Button();
             this.ClearButton = new System.Windows.Forms.Button();
             this.DotList = new System.Windows.Forms.TextBox();
+            this.AddDotButton = new System.Windows.Forms.Button();
+            this.ConnectDotButton = new System.Windows.Forms.Button();
+            this.ModeName = new System.Windows.Forms.Label();
+            this.CurrentMode = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // AlgorithmName
@@ -57,7 +61,7 @@
             // 
             // CalculateButton
             // 
-            this.CalculateButton.Location = new System.Drawing.Point(216, 255);
+            this.CalculateButton.Location = new System.Drawing.Point(208, 261);
             this.CalculateButton.Name = "CalculateButton";
             this.CalculateButton.Size = new System.Drawing.Size(75, 23);
             this.CalculateButton.TabIndex = 3;
@@ -67,7 +71,8 @@
             // 
             // UndoButton
             // 
-            this.UndoButton.Location = new System.Drawing.Point(216, 302);
+            this.UndoButton.Location = new System.Drawing.Point(208, 300);
+            this.UndoButton.Margin = new System.Windows.Forms.Padding(0);
             this.UndoButton.Name = "UndoButton";
             this.UndoButton.Size = new System.Drawing.Size(75, 23);
             this.UndoButton.TabIndex = 4;
@@ -77,7 +82,7 @@
             // 
             // ClearButton
             // 
-            this.ClearButton.Location = new System.Drawing.Point(216, 346);
+            this.ClearButton.Location = new System.Drawing.Point(208, 346);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(75, 23);
             this.ClearButton.TabIndex = 5;
@@ -94,15 +99,59 @@
             this.DotList.Multiline = true;
             this.DotList.Name = "DotList";
             this.DotList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.DotList.Size = new System.Drawing.Size(198, 308);
+            this.DotList.Size = new System.Drawing.Size(187, 308);
             this.DotList.TabIndex = 6;
             this.DotList.Text = "Dots";
+            // 
+            // AddDotButton
+            // 
+            this.AddDotButton.Location = new System.Drawing.Point(208, 179);
+            this.AddDotButton.Name = "AddDotButton";
+            this.AddDotButton.Size = new System.Drawing.Size(75, 23);
+            this.AddDotButton.TabIndex = 7;
+            this.AddDotButton.Text = "Add Dot";
+            this.AddDotButton.UseVisualStyleBackColor = true;
+            this.AddDotButton.Click += new System.EventHandler(this.AddDotButton_Click);
+            // 
+            // ConnectDotButton
+            // 
+            this.ConnectDotButton.Location = new System.Drawing.Point(208, 220);
+            this.ConnectDotButton.Name = "ConnectDotButton";
+            this.ConnectDotButton.Size = new System.Drawing.Size(75, 23);
+            this.ConnectDotButton.TabIndex = 8;
+            this.ConnectDotButton.Text = "Connect Dot";
+            this.ConnectDotButton.UseVisualStyleBackColor = true;
+            this.ConnectDotButton.Click += new System.EventHandler(this.ConnectDotButton_Click);
+            // 
+            // ModeName
+            // 
+            this.ModeName.AutoSize = true;
+            this.ModeName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.ModeName.Location = new System.Drawing.Point(186, 26);
+            this.ModeName.Name = "ModeName";
+            this.ModeName.Size = new System.Drawing.Size(85, 15);
+            this.ModeName.TabIndex = 9;
+            this.ModeName.Text = "Current Mode:";
+            // 
+            // CurrentMode
+            // 
+            this.CurrentMode.AutoSize = true;
+            this.CurrentMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.CurrentMode.Location = new System.Drawing.Point(186, 61);
+            this.CurrentMode.Name = "CurrentMode";
+            this.CurrentMode.Size = new System.Drawing.Size(74, 13);
+            this.CurrentMode.TabIndex = 10;
+            this.CurrentMode.Text = "Mode Name";
             // 
             // ShowPath
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 439);
+            this.Controls.Add(this.CurrentMode);
+            this.Controls.Add(this.ModeName);
+            this.Controls.Add(this.ConnectDotButton);
+            this.Controls.Add(this.AddDotButton);
             this.Controls.Add(this.DotList);
             this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.UndoButton);
@@ -115,7 +164,9 @@
             this.Text = "ShowPath";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ShowPath_Paint);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ShowPath_MouseClick);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ShowPath_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ShowPath_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ShowPath_MouseUp);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -129,5 +180,9 @@
         private System.Windows.Forms.Button UndoButton;
         private System.Windows.Forms.Button ClearButton;
         private System.Windows.Forms.TextBox DotList;
+        private System.Windows.Forms.Button AddDotButton;
+        private System.Windows.Forms.Button ConnectDotButton;
+        private System.Windows.Forms.Label ModeName;
+        private System.Windows.Forms.Label CurrentMode;
     }
 }

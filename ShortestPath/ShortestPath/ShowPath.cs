@@ -16,6 +16,9 @@ namespace ShortestPath
         public static int AreaWidth = 0;
         public static int DotNum = 1;
         public static int DotChar = 65;
+        private static bool  mouseIsDown;
+        private static ConnectionDot connectDot = new ConnectionDot();
+        private static string Mode = "None";
         public static List<Dots> dots = new List<Dots>();
 
         public ShowPath(string type)
@@ -23,6 +26,7 @@ namespace ShortestPath
             InitializeComponent();
             AlgorithmName.Text = type;
             DotList.Text = "";
+            CurrentMode.Text = Mode;
         }
         private void DrawArea()
         {
@@ -34,31 +38,33 @@ namespace ShortestPath
         {
             Graphics g = this.CreateGraphics();
             System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(DotColor);
-            g.FillEllipse(myBrush, x, y, 16, 16);
+            g.FillEllipse(myBrush, x, y, 25, 25);
             Font drawFont = new Font("Arial Bold", 8);
             SolidBrush drawBrush = new SolidBrush(DotNameColor);
             char character = (char)dotChar;
-            g.DrawString(character.ToString(), drawFont, drawBrush, x+3, y+2);
+            g.DrawString(character.ToString(), drawFont, drawBrush, x+7, y+6);
         }
         private void DrawTriangle(int x, int y, Color DotColor)
         {
             Graphics g = this.CreateGraphics();
             Pen drawingPen = new Pen(DotColor, 1);
-            g.DrawLine(drawingPen, new Point(x-13, y-16), new Point(x-8, y-21));
-            g.DrawLine(drawingPen, new Point(x-8, y-21), new Point(x-3, y-16));
-            g.DrawLine(drawingPen, new Point(x-13, y-16), new Point(x-3, y-16));
+            x = x +4;
+            y = y +4;
+            g.DrawLine(drawingPen, new Point(x-18, y-21), new Point(x-8, y-31));
+            g.DrawLine(drawingPen, new Point(x-8, y-31), new Point(x+2, y-21));
+            g.DrawLine(drawingPen, new Point(x-18, y-21), new Point(x+2, y-21));
 
-            g.DrawLine(drawingPen, new Point(x-13, y), new Point(x +5-13, y+5));
-            g.DrawLine(drawingPen, new Point(x+5-13 , y +5), new Point(x+10-13, y));
-            g.DrawLine(drawingPen, new Point(x-13, y), new Point(x+10-13, y));
+            g.DrawLine(drawingPen, new Point(x-18, y+6), new Point(x +5-13, y+16));
+            g.DrawLine(drawingPen, new Point(x+5-13 , y +16), new Point(x+15-13, y+6));
+            g.DrawLine(drawingPen, new Point(x-18, y+6), new Point(x+15-13, y+6));
 
-            g.DrawLine(drawingPen, new Point(x - 13-8, y - 16+8), new Point(x - 8-8, y - 21+8));
-            g.DrawLine(drawingPen, new Point(x - 13-8, y - 16+8), new Point(x - 8-8, y - 11+8));
-            g.DrawLine(drawingPen, new Point(x - 8-8, y - 11+8), new Point(x - 8-8, y - 21+8));
+            g.DrawLine(drawingPen, new Point(x - 27-5, y - 8), new Point(x - 22, y - 13-5));
+            g.DrawLine(drawingPen, new Point(x - 27-5, y - 8), new Point(x - 22, y - 3+5));
+            g.DrawLine(drawingPen, new Point(x - 22, y - 3+5), new Point(x - 22, y - 13-5));
 
-            g.DrawLine(drawingPen, new Point(x - 13 + 18, y - 16 + 8), new Point(x - 18 + 18, y - 21 + 8));
-            g.DrawLine(drawingPen, new Point(x - 13 + 18, y - 16 + 8), new Point(x - 18 + 18, y - 11 + 8));
-            g.DrawLine(drawingPen, new Point(x - 18 + 18, y - 11 + 8), new Point(x - 18 + 18, y - 21 + 8));
+            g.DrawLine(drawingPen, new Point(x + 11+5, y - 8), new Point(x+6 , y - 13-5));
+            g.DrawLine(drawingPen, new Point(x + 11+5, y - 8), new Point(x+6 , y - 3+5));
+            g.DrawLine(drawingPen, new Point(x + 6, y - 3+5), new Point(x+6 , y - 13-5));
 
 
 
@@ -73,8 +79,8 @@ namespace ShortestPath
         private Color FromRgbExample()
         {
             Random rnd = new Random();
-            int a = rnd.Next(0,255);  // 1 <= month < 13
-            int b = rnd.Next(0,255);    // 1 <= dice < 7
+            int a = rnd.Next(0,255);
+            int b = rnd.Next(0,255);
             int c = rnd.Next(0,255);
             Color myRgbColor = new Color();
             myRgbColor = Color.FromArgb(a, b, c);
@@ -88,12 +94,29 @@ namespace ShortestPath
             {
                 if(35 < y && y <  AreaHeight + 13 )
                 {
-                    DrawEllipse(x, y, FromRgbExample(),DotChar,Color.Black);
-                    dots.Add(new Dots { DotX = x ,DotY = y, DotNum = DotNum,DotChar = DotChar});
-                    char character = (char) DotChar;
-                    DotList.Text = DotList.Text + DotNum + ". | Name: " + character.ToString() +" | X: " +x + " | Y: " + y+ Environment.NewLine;
-                    DotNum++;
-                    DotChar++;
+                    if(Mode.Equals("Add Dot Mode"))
+                    {
+                        DrawEllipse(x, y, FromRgbExample(), DotChar, Color.Black);
+                        dots.Add(new Dots { DotX = x, DotY = y, DotNum = DotNum, DotChar = DotChar });
+                        char character = (char)DotChar;
+                        DotList.Text = DotList.Text + DotNum + ". | Name: " + character.ToString() + " | X: " + x + " | Y: " + y + Environment.NewLine;
+                        DotNum++;
+                        DotChar++;
+                    }
+                    if(Mode.Equals("Connect Dot Mode"))
+                    {
+                        if(connectDot.ConnectDot1 == false)
+                        {
+                            connectDot.ConnectDot1 = true;
+                            connectDot.ConnectDot1X = x;
+                            connectDot.ConnectDot1Y = y;
+                            connectDot.RemoveDot1X = x;
+                            connectDot.RemoveDot1Y = y;
+                        }else
+                        {
+                            connectDot.ConnectDot2 = true;
+                        }
+                    }
                 }
             }
         }
@@ -146,7 +169,6 @@ namespace ShortestPath
                         if (toplam <= 17)
                         {
                             control = true;
-                            //MessageBox.Show("Hello World");
                             DrawTriangle(dots.ElementAt(i).DotX + 16, dots.ElementAt(i).DotY + 16, Color.Black);
                         }
                     }
@@ -157,9 +179,55 @@ namespace ShortestPath
                             DrawTriangle(dots.ElementAt(i).DotX + 16, dots.ElementAt(i).DotY + 16, this.BackColor);
                         }
                     }
+                    if(Mode.Equals("Connect Dot Mode"))
+                    {
+                        if(mouseIsDown)
+                        {
+                            if (connectDot.ConnectDot1)
+                            {
+                                Point point = PointToClient(Cursor.Position);
+                                DrawConnectDot(connectDot.ConnectDot1X,connectDot.ConnectDot1Y,(point.X), (point.Y));
+                            }
+                        }
+                       
+                    }
 
                 }
             }
+        }
+        private void DrawConnectDot(int BeginX, int BeginY,int EndX,int EndY)
+        {
+            Graphics g = this.CreateGraphics();
+            Pen pen = new Pen(Color.Black);
+            g.DrawLine(pen, BeginX, BeginY, EndX, EndY);
+            connectDot.ConnectDot2X = EndX;
+            connectDot.ConnectDot2Y = EndY;
+        }
+        private void AddDotButton_Click(object sender, EventArgs e)
+        {
+            Mode = "Add Dot Mode";
+            CurrentMode.Text = Mode;
+            CurrentMode.ForeColor = Color.Red;
+        }
+
+        private void ConnectDotButton_Click(object sender, EventArgs e)
+        {
+            Mode = "Connect Dot Mode";
+            CurrentMode.Text = Mode;
+            CurrentMode.ForeColor = Color.Red;
+        }
+
+        private void ShowPath_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseIsDown = true;
+            //MessageBox.Show("Maouse basılı");
+
+        }
+
+        private void ShowPath_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseIsDown = false;
+            //MessageBox.Show("Mouse ı bıraktın");
         }
     }
 }
