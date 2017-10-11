@@ -18,9 +18,6 @@ namespace ShortestPath
         public int RemoveDot1X;
         public int RemoveDot1Y;
 
-        public int tempRemove1X;
-        public int tempRemove1Y;
-
         public int ConnectDot2X;
         public int ConnectDot2Y;
         
